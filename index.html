@@ -13,10 +13,29 @@
         <script>
             $(document).ready(function(){
                 for( var i=1; i<=151; i++){
-                    var url = `<img src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${i}.png">`
-                     $('.img-pokemon').append(url);
+                    var url = `<img id = ${i} src="http://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${i}.png">`
+                     $('#img-pokemon').append(url);
                 }
 
+            })
+
+            $(document).on('click', 'img', function(){
+                var id = $(this).attr('id');
+                var url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
+                
+
+                $.get(url, function(data){
+                    $('#nom-pokemon').text(data.name);
+                    $('#img-pok').attr('src',data.sprites.front_default);
+                    var list = '<ul>'
+                    for (var i=0; i<data.types.length; i++){
+                        list = list + ('<li>' + data.types[i].type.name + '</li>');
+                    }
+                    list = list + '</ul>'
+                    $('#type').html(list);
+                    $('#height').html(data.height);
+                    $('#weight').html(data.weight);
+                });
             })
         </script>
     </head>
@@ -24,7 +43,26 @@
         <div class="container">
             <h1>Listado de Pokemon</h1>
             <div class="row">
-                <div class="img-pokemon">                    
+                <div class="col-8">
+                    <div id="img-pokemon">                    
+                    </div>
+                </div>
+            
+                <div class="col-4">
+                    <div class="card sticky-top">
+                        <div class="card-header"><h3 class="card-title text-center text-capitalize" id="nom-pokemon">Name Pokemon:</h3></div>
+                        <div class="card-body img-thumbnail">
+                            <img class="card-img-top" id="img-pok" src="" alt="">
+                            <div>
+                                <h4>Types:</h4>
+                                <h4 id="type" class="card-title"></h4>
+                                <h4>Height:</h4>
+                                <h4 id="height" class="card-title"></h4>
+                                <h4>Weight:</h4>
+                                <h4 id="weight" class="card-title"></h4>
+                            </div>
+                        </div>     
+                    </div>
                 </div>
             </div>
         </div>        
